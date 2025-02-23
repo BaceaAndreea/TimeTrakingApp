@@ -1,0 +1,90 @@
+.signup-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background: linear-gradient(135deg, #e0f7fa, #cfdef3); // 🔹 Gradient mai deschis
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.signup-card {
+  background: white;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 400px;
+  text-align: center;
+
+  h2 {
+    margin-bottom: 1rem;
+    font-weight: bold;
+    color: #4a4a4a;
+  }
+
+  .input-group {
+    text-align: left;
+    margin-bottom: 1rem;
+
+    label {
+      display: block;
+      font-size: 14px;
+      font-weight: bold;
+      color: #6a6a6a;
+      margin-bottom: 5px;
+    }
+
+    input {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #d1d9e6;
+      border-radius: 6px;
+      font-size: 16px;
+      background: #f8f9fa;
+      color: #4a4a4a;
+    }
+
+    input:focus {
+      border-color: #b0c4de;
+      outline: none;
+    }
+  }
+
+  button {
+    width: 100%;
+    background: #b0c4de;
+    color: white;
+    padding: 10px;
+    border: none;
+    border-radius: 6px;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
+
+    &:hover {
+      background: #a1b5d1;
+    }
+
+    &:disabled {
+      background: #d6d9de;
+      cursor: not-allowed;
+    }
+  }
+
+  .links {
+    margin-top: 1rem;
+    font-size: 14px;
+
+    a {
+      text-decoration: none;
+      color: #7a8ca5;
+      font-weight: bold;
+      transition: 0.3s;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+}

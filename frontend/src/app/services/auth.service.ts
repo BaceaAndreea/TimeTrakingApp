@@ -1,5 +1,5 @@
 import {inject, Injectable} from '@angular/core';
-import {Auth, signInWithEmailAndPassword, signOut, User} from '@angular/fire/auth';
+import {Auth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, User} from '@angular/fire/auth';
 import {Router} from '@angular/router';
 import {Observable} from 'rxjs';
 
@@ -23,6 +23,11 @@ export class AuthService {
         console.error("Login failed:", error.message);
       });
   }
+
+  register(email: string, password: string) {
+    return createUserWithEmailAndPassword(this.auth, email, password);
+  }
+
 
 
   logout() {
