@@ -2,13 +2,14 @@ import {Component, OnInit} from '@angular/core';
 import {Observable} from 'rxjs';
 import {Auth, user} from '@angular/fire/auth';
 import {Router} from '@angular/router';
+import {MatSnackBar} from '@angular/material/snack-bar';
+import {AuthService} from '../../services/auth.service';
 
 @Component({
-  selector: 'app-home',
-  standalone: true,
-  imports: [],
-  templateUrl: './home.component.html',
-  styleUrl: './home.component.scss'
+    selector: 'app-home',
+    imports: [],
+    templateUrl: './home.component.html',
+    styleUrl: './home.component.scss'
 })
 export class HomeComponent implements OnInit{
   user$: Observable<any>;
@@ -17,7 +18,7 @@ export class HomeComponent implements OnInit{
   isRunning: boolean = false;
 
 
-  constructor(private auth:Auth, private router: Router) {
+  constructor(private auth:Auth, private router: Router, private snackBar: MatSnackBar, private authService : AuthService) {
     this.user$ = user(auth);
   }
 
@@ -42,7 +43,9 @@ export class HomeComponent implements OnInit{
 
   saveTime() {
     localStorage.setItem('timer', this.timeElapsed.toString());
-    alert('Timpul a fost salvat cu succes!');
+    this.snackBar.open('Timpul a fost salvat!', 'OK', {
+      duration: 3000,
+    });
   }
 
   resetTimer() {
@@ -50,6 +53,14 @@ export class HomeComponent implements OnInit{
     this.timeElapsed = 0;
     this.isRunning = false;
     localStorage.removeItem('timer');
+  }
+
+  logout() {
+    this.authService.logout().then(() => {
+      this.router.navigate(['/login']);
+    }).catch(error => {
+      console.error("Eroare la delogare:", error);
+    });
   }
 
 }

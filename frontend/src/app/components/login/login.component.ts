@@ -4,14 +4,13 @@ import {AuthService} from '../../services/auth.service';
 import {RouterLink} from '@angular/router';
 
 @Component({
-  selector: 'app-login',
-  standalone: true,
-  imports: [
-    ReactiveFormsModule,
-    RouterLink
-  ],
-  templateUrl: './login.component.html',
-  styleUrl: './login.component.scss'
+    selector: 'app-login',
+    imports: [
+        ReactiveFormsModule,
+        RouterLink
+    ],
+    templateUrl: './login.component.html',
+    styleUrl: './login.component.scss'
 })
 export class LoginComponent {
 
