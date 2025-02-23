@@ -12,15 +12,44 @@ import {Router} from '@angular/router';
 })
 export class HomeComponent implements OnInit{
   user$: Observable<any>;
+  timeElapsed: number = 0;
+  timer: any;
+  isRunning: boolean = false;
+
 
   constructor(private auth:Auth, private router: Router) {
     this.user$ = user(auth);
   }
 
   ngOnInit(): void {
-    this.user$.subscribe(user => {
-      console.log("User in home component:", user);
-    });
+    const savedTime = localStorage.getItem('timer');
+    if (savedTime) {
+      this.timeElapsed = Number(savedTime);
+    }
+  }
+
+  startStopTimer() {
+    if (this.isRunning) {
+      clearInterval(this.timer);
+      this.saveTime();
+    } else {
+      this.timer = setInterval(() => {
+        this.timeElapsed++;
+      }, 1000);
+    }
+    this.isRunning = !this.isRunning;
+  }
+
+  saveTime() {
+    localStorage.setItem('timer', this.timeElapsed.toString());
+    alert('Timpul a fost salvat cu succes!');
+  }
+
+  resetTimer() {
+    clearInterval(this.timer);
+    this.timeElapsed = 0;
+    this.isRunning = false;
+    localStorage.removeItem('timer');
   }
 
 }

@@ -1,1 +1,17 @@
-<p>home works!</p>
+<div class="home-container">
+  <h1>Timer</h1>
+
+
+  <div class="timer-display">
+    <p>{{ timeElapsed }} secunde</p>
+  </div>
+
+  <div class="progress-bar">
+    <div class="progress" [style.width]="(timeElapsed % 60) + '%'"></div>
+  </div>
+
+  <div class="buttons">
+    <button (click)="startStopTimer()">{{ isRunning ? 'Stop' : 'Start' }}</button>
+    <button (click)="resetTimer()">Resetează</button>
+  </div>
+</div>
