@@ -17,7 +17,7 @@ export class AuthService {
     return signInWithEmailAndPassword(this.auth, email, password)
       .then(userCredential => {
         console.log("Login successful:", userCredential);
-        this.router.navigate(['/home']);  // 🔹 Redirecționează către home după login
+        this.router.navigate(['/home']);
       })
       .catch(error => {
         console.error("Login failed:", error.message);

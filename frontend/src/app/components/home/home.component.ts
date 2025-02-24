@@ -1,13 +1,20 @@
 import {Component, OnInit} from '@angular/core';
 import {Observable} from 'rxjs';
 import {Auth, user} from '@angular/fire/auth';
-import {Router} from '@angular/router';
+import {Router, RouterLink} from '@angular/router';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {AuthService} from '../../services/auth.service';
+import {MatTab, MatTabGroup} from '@angular/material/tabs';
+import {MatAnchor} from '@angular/material/button';
 
 @Component({
     selector: 'app-home',
-    imports: [],
+  imports: [
+    MatTabGroup,
+    MatTab,
+    MatAnchor,
+    RouterLink
+  ],
     templateUrl: './home.component.html',
     styleUrl: './home.component.scss'
 })

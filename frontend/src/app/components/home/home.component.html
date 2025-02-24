@@ -2,18 +2,37 @@
   <div class="header">
     <button (click)="logout()">Sign Out</button>
   </div>
-  <h1>Timer</h1>
 
-  <div class="timer-display">
-    <p>{{ timeElapsed }} secunde</p>
-  </div>
+  <div class="content">
+    <mat-tab-group class="vertical-tabs">
+    <mat-tab label="Tracking Time">
+        <div class="timer-container">
+          <h1>Timer</h1>
+          <div class="timer-display">
+            <p>{{ timeElapsed }} secunde</p>
+          </div>
+          <div class="progress-bar">
+            <div class="progress" [style.width]="(timeElapsed % 60) + '%'"></div>
+          </div>
+          <div class="buttons">
+            <button (click)="startStopTimer()">{{ isRunning ? 'Stop' : 'Start' }}</button>
+            <button (click)="resetTimer()">Resetează</button>
+          </div>
+        </div>
+      </mat-tab>
 
-  <div class="progress-bar">
-    <div class="progress" [style.width]="(timeElapsed % 60) + '%'"></div>
-  </div>
+      <mat-tab label="Tickets">
+        <a mat-button routerLink="/tickets">Go to Tickets</a>
+      </mat-tab>
 
-  <div class="buttons">
-    <button (click)="startStopTimer()">{{ isRunning ? 'Stop' : 'Start' }}</button>
-    <button (click)="resetTimer()">Resetează</button>
+      <mat-tab label="Holidays">
+        <a mat-button routerLink="/holidays">Go to Holidays</a>
+      </mat-tab>
+
+
+      <mat-tab label="Up-To-Date">
+        <a mat-button routerLink="/up-to-date">Go to Up-To-Date</a>
+      </mat-tab>
+    </mat-tab-group>
   </div>
 </div>
