@@ -54,7 +54,6 @@ export class HolidaysComponent {
   totalDays: number = 21;
   usedDays: number = 4;
   remainingDays: number = this.totalDays - this.usedDays;
-
   showRequestForm: boolean = false;
   startDate!: string;
   endDate!: string;
@@ -82,7 +81,6 @@ export class HolidaysComponent {
       return;
     }
 
-    // Formatarea datei în format 'YYYY-MM-DD'
     const formattedStartDate = formatDate(this.startDate, 'yyyy-MM-dd', 'en-US');
     const formattedEndDate = formatDate(this.endDate, 'yyyy-MM-dd', 'en-US');
 
@@ -93,7 +91,7 @@ export class HolidaysComponent {
     };
 
     this.dataSource.data = [...this.dataSource.data, newRequest];
-    this.showRequestForm = false; // Ascunde formularul după trimitere
+    this.showRequestForm = false;
   }
 
   deleteRequest(request: RequestData) {

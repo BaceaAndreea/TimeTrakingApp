@@ -4,6 +4,15 @@
   align-items: center;
   height: 100vh;
   flex-direction: column;
+  background: #f0f4f8;
+  font-family: Arial, sans-serif;
+
+  h1 {
+    color: #333;
+    margin-bottom: 30px;
+    font-size: 32px;
+    font-weight: bold;
+  }
 }
 
 .stats {

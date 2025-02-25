@@ -5,16 +5,13 @@
     <h5>Days already planned and consumed: {{ usedDays }}</h5>
     <h5>Remaining days that need planning: {{ remainingDays }}</h5>
 
-    <!-- Progress bar pentru zile consumate -->
+
     <mat-progress-bar mode="determinate" [value]="(usedDays / totalDays) * 100"></mat-progress-bar>
 
-    <!-- Buton de Back -->
     <button mat-button color="primary" (click)="goBack()">Back</button>
 
-    <!-- Buton pentru a afișa formularul -->
     <button mat-button color="accent" (click)="toggleRequestForm()">Request for Vacation</button>
 
-    <!-- Formular pentru cerere concediu -->
     <div *ngIf="showRequestForm" class="request-form">
       <mat-form-field appearance="outline">
         <mat-label>Start Date</mat-label>
@@ -38,7 +35,7 @@
       <button mat-raised-button color="primary" (click)="submitVacationRequest()">Submit Request</button>
     </div>
 
-    <!-- Grid pentru afișarea cererilor -->
+
     <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
       <ng-container matColumnDef="date">
         <th mat-header-cell *matHeaderCellDef> Date </th>

@@ -1,0 +1,51 @@
+<div class="login-container">
+  <div class="leave-tickets-container">
+    <h3>Leave Tickets</h3>
+    <progress max="100" [value]="(usedTickets / totalTickets) * 100"></progress>
+
+    <button (click)="goBack()">Back</button>
+    <button (click)="toggleRequestForm()">Request Leave Ticket</button>
+
+    <div *ngIf="showRequestForm" class="request-form">
+      <label>Request Type:</label>
+      <select [(ngModel)]="requestType">
+        <option value="personal">Personal</option>
+        <option value="medical">Medical</option>
+      </select>
+
+      <label>Reason:</label>
+      <textarea [(ngModel)]="reason"></textarea>
+
+      <label>Start Time:</label>
+      <input type="time" [(ngModel)]="startTime">
+
+      <label>End Time:</label>
+      <input type="time" [(ngModel)]="endTime">
+
+      <button (click)="submitLeaveTicket()">Submit</button>
+    </div>
+
+    <table>
+      <thead>
+      <tr>
+        <th>Date</th>
+        <th>Type</th>
+        <th>Reason</th>
+        <th>Start Time</th>
+        <th>End Time</th>
+        <th>Status</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let ticket of dataSource">
+        <td>{{ ticket.date }}</td>
+        <td>{{ ticket.type }}</td>
+        <td>{{ ticket.reason }}</td>
+        <td>{{ ticket.startTime }}</td>
+        <td>{{ ticket.endTime }}</td>
+        <td>{{ ticket.status }}</td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

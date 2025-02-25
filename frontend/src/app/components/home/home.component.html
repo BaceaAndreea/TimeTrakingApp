@@ -4,8 +4,8 @@
   </div>
 
   <div class="content">
-    <mat-tab-group class="vertical-tabs">
-    <mat-tab label="Tracking Time">
+    <mat-tab-group class="vertical-tabs" (selectedTabChange)="onTabChange($event)">
+      <mat-tab label="Tracking Time">
         <div class="timer-container">
           <h1>Timer</h1>
           <div class="timer-display">
@@ -21,18 +21,11 @@
         </div>
       </mat-tab>
 
-      <mat-tab label="Tickets">
-        <a mat-button routerLink="/tickets">Go to Tickets</a>
-      </mat-tab>
 
-      <mat-tab label="Holidays">
-        <a mat-button routerLink="/holidays">Go to Holidays</a>
-      </mat-tab>
+      <mat-tab label="Tickets"></mat-tab>
+      <mat-tab label="Holidays"></mat-tab>
+      <mat-tab label="Up-To-Date"></mat-tab>
 
-
-      <mat-tab label="Up-To-Date">
-        <a mat-button routerLink="/up-to-date">Go to Up-To-Date</a>
-      </mat-tab>
     </mat-tab-group>
   </div>
 </div>

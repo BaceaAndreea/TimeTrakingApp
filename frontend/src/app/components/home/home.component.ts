@@ -4,16 +4,14 @@ import {Auth, user} from '@angular/fire/auth';
 import {Router, RouterLink} from '@angular/router';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {AuthService} from '../../services/auth.service';
-import {MatTab, MatTabGroup} from '@angular/material/tabs';
+import {MatTab, MatTabChangeEvent, MatTabGroup} from '@angular/material/tabs';
 import {MatAnchor} from '@angular/material/button';
 
 @Component({
     selector: 'app-home',
   imports: [
     MatTabGroup,
-    MatTab,
-    MatAnchor,
-    RouterLink
+    MatTab
   ],
     templateUrl: './home.component.html',
     styleUrl: './home.component.scss'
@@ -70,4 +68,13 @@ export class HomeComponent implements OnInit{
     });
   }
 
+  onTabChange(event: MatTabChangeEvent) {
+    if (event.index === 1) {
+      this.router.navigate(['/tickets']);
+    } else if (event.index === 2) {
+      this.router.navigate(['/holidays']);
+    } else if (event.index === 3) {
+      this.router.navigate(['/up-to-date']);
+    }
+  }
 }
