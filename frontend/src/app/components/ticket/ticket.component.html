@@ -1,1 +1,37 @@
-merge
+<div class="ticket-container">
+  <h2>Gestionare Zile Lucrate</h2>
+
+  <div class="filters">
+    <input type="text" [formControl]="searchControl" placeholder="Căutare după dată..." />
+    <select [formControl]="statusFilter">
+      <option value="">Toate</option>
+      <option value="aprobat">Aprobat</option>
+      <option value="în așteptare">În așteptare</option>
+      <option value="respins">Respins</option>
+    </select>
+    <button (click)="sortByDate()">Sortare după dată</button>
+  </div>
+
+  <table>
+    <thead>
+    <tr>
+      <th>Data <span (click)="sortByDate()">⬆⬇</span></th>
+      <th>Ore lucrate</th>
+      <th>Status</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let workDay of filteredWorkDays">
+      <td>{{ workDay.date }}</td>
+      <td>{{ workDay.hoursWorked }}</td>
+      <td [class]="workDay.status">{{ workDay.status }}</td>
+    </tr>
+    </tbody>
+  </table>
+
+
+  <div class="button-container">
+    <button mat-button color="primary" (click)="goBack()">Back</button>
+  </div>
+
+</div>
