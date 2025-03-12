@@ -1,6 +1,8 @@
 <div class="login-container">
   <div class="leave-tickets-container">
     <h3>Leave Tickets</h3>
+    <h5>Total Tickets: {{totalTickets}}</h5>
+    <h5>Used Tickets: {{usedTickets}}</h5>
     <progress max="100" [value]="(usedTickets / totalTickets) * 100"></progress>
 
     <button (click)="goBack()">Back</button>
