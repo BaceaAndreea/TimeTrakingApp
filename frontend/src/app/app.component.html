@@ -1,1 +1,4 @@
 <router-outlet></router-outlet>
+<button (click)="toggleTheme()" class="theme-toggle">
+  <mat-icon>{{ isDarkMode ? 'dark_mode' : 'light_mode' }}</mat-icon>
+</button>

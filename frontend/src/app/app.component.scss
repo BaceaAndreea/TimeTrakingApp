@@ -1,0 +1,43 @@
+// Tema Dark Mode
+.dark-mode {
+  background-color: #121212;
+  color: #ffffff;
+
+  .timer-container {
+    background: #333;
+    box-shadow: 0 4px 10px rgba(255, 255, 255, 0.1);
+  }
+
+  .progress-bar {
+    background: #444;
+  }
+
+  .progress {
+    background: #bb86fc;
+  }
+
+  button {
+    background: #444;
+    color: white;
+
+    &:hover {
+      background: #555;
+    }
+  }
+
+  mat-tab-label {
+    color: #bbb !important;
+  }
+}
+
+// Stilizare pentru butonul de toggle
+.theme-toggle {
+  position: absolute;
+  top: 10px;
+  left: 20px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 24px;
+  color: inherit;
+}

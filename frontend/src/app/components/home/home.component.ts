@@ -6,12 +6,14 @@ import {MatSnackBar} from '@angular/material/snack-bar';
 import {AuthService} from '../../services/auth.service';
 import {MatTab, MatTabChangeEvent, MatTabGroup} from '@angular/material/tabs';
 import {MatAnchor} from '@angular/material/button';
+import {MatIconModule} from '@angular/material/icon';
 
 @Component({
     selector: 'app-home',
   imports: [
     MatTabGroup,
-    MatTab
+    MatTab,
+    MatIconModule
   ],
     templateUrl: './home.component.html',
     styleUrl: './home.component.scss'
