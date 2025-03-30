@@ -1,53 +1,100 @@
-<div class="login-container">
-  <div class="leave-tickets-container">
-    <h3>Leave Tickets</h3>
-    <h5>Total Tickets: {{totalTickets}}</h5>
-    <h5>Used Tickets: {{usedTickets}}</h5>
-    <progress max="100" [value]="(usedTickets / totalTickets) * 100"></progress>
-
-    <button (click)="goBack()">Back</button>
-    <button (click)="toggleRequestForm()">Request Leave Ticket</button>
-
-    <div *ngIf="showRequestForm" class="request-form">
-      <label>Request Type:</label>
-      <select [(ngModel)]="requestType">
-        <option value="personal">Personal</option>
-        <option value="medical">Medical</option>
-      </select>
-
-      <label>Reason:</label>
-      <textarea [(ngModel)]="reason"></textarea>
-
-      <label>Start Time:</label>
-      <input type="time" [(ngModel)]="startTime">
-
-      <label>End Time:</label>
-      <input type="time" [(ngModel)]="endTime">
-
-      <button (click)="submitLeaveTicket()">Submit</button>
+<div class="home-container">
+  <div class="header">
+    <div class="navbar-container">
+      <div class="tab-navigation">
+        <div class="tab" [class.active]="false" (click)="goToTrackingTime()">Tracking Time</div>
+        <div class="tab" [class.active]="false" (click)="goToTickets()">Tickets</div>
+        <div class="tab" [class.active]="false" (click)="goToHolidays()">Holidays</div>
+        <div class="tab" [class.active]="true">Time Off</div>
+      </div>
     </div>
+    <button class="sign-out-btn" (click)="signOut()">Sign Out</button>
+  </div>
 
-    <table>
-      <thead>
-      <tr>
-        <th>Date</th>
-        <th>Type</th>
-        <th>Reason</th>
-        <th>Start Time</th>
-        <th>End Time</th>
-        <th>Status</th>
-      </tr>
-      </thead>
-      <tbody>
-      <tr *ngFor="let ticket of dataSource">
-        <td>{{ ticket.date }}</td>
-        <td>{{ ticket.type }}</td>
-        <td>{{ ticket.reason }}</td>
-        <td>{{ ticket.startTime }}</td>
-        <td>{{ ticket.endTime }}</td>
-        <td>{{ ticket.status }}</td>
-      </tr>
-      </tbody>
-    </table>
+  <div class="content">
+    <div class="tab-content">
+      <div class="time-off-container">
+        <h1>Time Off Management</h1>
+
+        <div class="time-off-stats">
+          <h3>About your time off this year:</h3>
+          <div class="stat-item">
+            <span>Total allocated tickets:</span>
+            <span class="value">{{ totalTickets }}</span>
+          </div>
+          <div class="stat-item">
+            <span>Used tickets:</span>
+            <span class="value">{{ usedTickets }}</span>
+          </div>
+          <div class="stat-item">
+            <span>Remaining tickets:</span>
+            <span class="value">{{ totalTickets - usedTickets }}</span>
+          </div>
+
+          <div class="progress-container">
+            <div class="progress-bar">
+              <div class="progress" [style.width.%]="(usedTickets / totalTickets) * 100"></div>
+            </div>
+            <div class="progress-labels">
+              <span>0</span>
+              <span>{{ totalTickets }}</span>
+            </div>
+          </div>
+
+          <button class="request-btn" (click)="toggleRequestForm()">Request Leave Ticket</button>
+        </div>
+
+        <div *ngIf="showRequestForm" class="request-form">
+          <div class="form-group">
+            <label>Request Type:</label>
+            <select [(ngModel)]="requestType">
+              <option value="personal">Personal</option>
+              <option value="medical">Medical</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>Reason:</label>
+            <input type="text" [(ngModel)]="reason">
+          </div>
+
+          <div class="form-group">
+            <label>Start Time:</label>
+            <input type="time" [(ngModel)]="startTime">
+          </div>
+
+          <div class="form-group">
+            <label>End Time:</label>
+            <input type="time" [(ngModel)]="endTime">
+          </div>
+
+          <button class="submit-btn" (click)="submitLeaveTicket()">Submit</button>
+        </div>
+
+        <div class="table-container">
+          <table>
+            <thead>
+            <tr>
+              <th>Date</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let ticket of dataSource; let i = index">
+              <td>{{ ticket.date }}</td>
+              <td [class]="ticket.status.toLowerCase()">{{ ticket.status }}</td>
+              <td>
+                <button class="delete-btn" (click)="deleteTicket(i)">Delete</button>
+              </td>
+            </tr>
+            <tr *ngIf="dataSource.length === 0">
+              <td colspan="3" class="no-data">No time off requests available</td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
   </div>
 </div>

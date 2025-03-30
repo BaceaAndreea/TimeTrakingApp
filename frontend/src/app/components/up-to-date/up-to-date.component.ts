@@ -1,7 +1,16 @@
 import { Component } from '@angular/core';
-import {NgForOf, NgIf} from '@angular/common';
+import {NgClass, NgForOf, NgIf} from '@angular/common';
 import {FormsModule} from '@angular/forms';
+import {Router, RouterLink, RouterLinkActive} from '@angular/router';
 
+interface LeaveTicket {
+  date: string;
+  type: string;
+  reason: string;
+  startTime: string;
+  endTime: string;
+  status: 'Approved' | 'Pending' | 'Rejected';
+}
 
 @Component({
   selector: 'app-up-to-date',
@@ -17,44 +26,76 @@ export class UpToDateComponent {
   totalTickets = 10;
   usedTickets = 3;
   showRequestForm = false;
-  requestType = '';
+  requestType = 'personal';
   reason = '';
   startTime = '';
   endTime = '';
 
-  dataSource = [
+  dataSource: LeaveTicket[] = [
     { date: '2024-05-01', type: 'personal', reason: 'Vacation', startTime: '09:00', endTime: '12:00', status: 'Approved' },
     { date: '2024-06-10', type: 'medical', reason: 'Doctor appointment', startTime: '14:00', endTime: '16:00', status: 'Pending' }
   ];
 
-  toggleRequestForm() {
-    this.showRequestForm = !this.showRequestForm;
+  constructor(private router: Router) {}
+
+  // Navigation methods
+  goToTrackingTime(): void {
+    this.router.navigate(['/tracking-time']);
   }
 
-  submitLeaveTicket() {
+  goToTickets(): void {
+    this.router.navigate(['/leave-tickets']);
+  }
+
+  goToHolidays(): void {
+    this.router.navigate(['/holidays']);
+  }
+
+  toggleRequestForm(): void {
+    this.showRequestForm = !this.showRequestForm;
+    // Reset form fields when opening
+    if (this.showRequestForm) {
+      this.requestType = 'personal';
+      this.reason = '';
+      this.startTime = '';
+      this.endTime = '';
+    }
+  }
+
+  submitLeaveTicket(): void {
     if (!this.requestType || !this.reason || !this.startTime || !this.endTime) {
       alert("Please complete all fields.");
       return;
     }
 
-    const newTicket = {
+    const newTicket: LeaveTicket = {
       date: new Date().toISOString().split('T')[0],
-      status: "Pending",
-      reason: this.reason,
       type: this.requestType,
-      startTime: this.startTime, // Adăugăm ora de start
-      endTime: this.endTime // Adăugăm ora de final
+      reason: this.reason,
+      startTime: this.startTime,
+      endTime: this.endTime,
+      status: 'Pending'
     };
 
     this.dataSource.push(newTicket);
+    this.usedTickets++;
     this.showRequestForm = false;
-    this.requestType = '';
-    this.reason = '';
-    this.startTime = '';
-    this.endTime = '';
   }
 
-  goBack() {
-    history.back();
+  deleteTicket(index: number): void {
+    const ticket = this.dataSource[index];
+    if (ticket.status === 'Approved') {
+      this.usedTickets--;
+    }
+    this.dataSource.splice(index, 1);
+  }
+
+  signOut(): void {
+    // Clear any local storage or session data if needed
+    localStorage.removeItem('user');
+    sessionStorage.clear();
+
+    // Navigate to login page
+    this.router.navigate(['/login']);
   }
 }
