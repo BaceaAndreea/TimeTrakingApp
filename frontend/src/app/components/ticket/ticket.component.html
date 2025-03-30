@@ -1,37 +1,51 @@
-<div class="ticket-container">
-  <h2>Gestionare Zile Lucrate</h2>
-
-  <div class="filters">
-    <input type="text" [formControl]="searchControl" placeholder="Căutare după dată..." />
-    <select [formControl]="statusFilter">
-      <option value="">Toate</option>
-      <option value="aprobat">Aprobat</option>
-      <option value="în așteptare">În așteptare</option>
-      <option value="respins">Respins</option>
-    </select>
-    <button (click)="sortByDate()">Sortare după dată</button>
+<div class="home-container">
+  <div class="header">
+    <div class="navbar-container">
+      <div class="tab-navigation">
+        <div class="tab" [class.active]="false" (click)="goToTrackingTime()">Tracking Time</div>
+        <div class="tab" [class.active]="true">Tickets</div>
+        <div class="tab" [class.active]="false" (click)="goToHolidays()">Holidays</div>
+        <div class="tab" [class.active]="false" (click)="goToUpToDate()">Time Off</div>
+      </div>
+    </div>
+    <button class="sign-out-btn" (click)="logout()">Sign Out</button>
   </div>
 
-  <table>
-    <thead>
-    <tr>
-      <th>Data <span (click)="sortByDate()">⬆⬇</span></th>
-      <th>Ore lucrate</th>
-      <th>Status</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr *ngFor="let workDay of filteredWorkDays">
-      <td>{{ workDay.date }}</td>
-      <td>{{ workDay.hoursWorked }}</td>
-      <td [class]="workDay.status">{{ workDay.status }}</td>
-    </tr>
-    </tbody>
-  </table>
+  <div class="content">
+    <div class="tab-content">
+      <div class="ticket-container">
+        <h1>Worked Days Management</h1>
 
+        <div class="filters">
+          <input type="text" [formControl]="searchControl" placeholder="Search by date..." />
+          <select [formControl]="statusFilter">
+            <option value="">All</option>
+            <option value="approved">Approved</option>
+            <option value="pending">Pending</option>
+            <option value="rejected">Rejected</option>
+          </select>
+          <button class="sort-btn" (click)="sortByDate()">Sort by date</button>
+        </div>
 
-  <div class="button-container">
-    <button mat-button color="primary" (click)="goBack()">Back</button>
+        <div class="table-container">
+          <table>
+            <thead>
+            <tr>
+              <th>Date <span (click)="sortByDate()" class="sort-icon">⬆⬇</span></th>
+              <th>Hours worked</th>
+              <th>Status</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let workDay of filteredWorkDays">
+              <td>{{ workDay.date }}</td>
+              <td>{{ workDay.hoursWorked }}</td>
+              <td [class]="workDay.status">{{ workDay.status }}</td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
   </div>
-
 </div>

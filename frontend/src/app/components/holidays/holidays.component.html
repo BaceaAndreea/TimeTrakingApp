@@ -1,61 +1,92 @@
-<div class="holidays-container">
-  <div class="stats">
-    <h3>About your holidays this year:</h3>
-    <h5>Total allocated days: {{ totalDays }}</h5>
-    <h5>Days already planned and consumed: {{ usedDays }}</h5>
-    <h5>Remaining days that need planning: {{ remainingDays }}</h5>
-
-
-    <mat-progress-bar mode="determinate" [value]="(usedDays / totalDays) * 100"></mat-progress-bar>
-
-    <button mat-button color="primary" (click)="goBack()">Back</button>
-
-    <button mat-button color="accent" (click)="toggleRequestForm()">Request for Vacation</button>
-
-    <div *ngIf="showRequestForm" class="request-form">
-      <mat-form-field appearance="outline">
-        <mat-label>Start Date</mat-label>
-        <input matInput [matDatepicker]="startPicker" [(ngModel)]="startDate">
-        <mat-datepicker-toggle matIconSuffix [for]="startPicker"></mat-datepicker-toggle>
-        <mat-datepicker #startPicker></mat-datepicker>
-      </mat-form-field>
-
-      <mat-form-field appearance="outline">
-        <mat-label>End Date</mat-label>
-        <input matInput [matDatepicker]="endPicker" [(ngModel)]="endDate">
-        <mat-datepicker-toggle matIconSuffix [for]="endPicker"></mat-datepicker-toggle>
-        <mat-datepicker #endPicker></mat-datepicker>
-      </mat-form-field>
-
-      <mat-form-field appearance="outline">
-        <mat-label>Reason</mat-label>
-        <textarea matInput [(ngModel)]="reason"></textarea>
-      </mat-form-field>
-
-      <button mat-raised-button color="primary" (click)="submitVacationRequest()">Submit Request</button>
+<div class="home-container">
+  <div class="header">
+    <div class="navbar-container">
+      <div class="tab-navigation">
+        <div class="tab" [class.active]="false" (click)="goToTrackingTime()">Tracking Time</div>
+        <div class="tab" [class.active]="false" (click)="goToTickets()">Tickets</div>
+        <div class="tab" [class.active]="true">Holidays</div>
+        <div class="tab" [class.active]="false" (click)="goToUpToDate()">Time Off</div>
+      </div>
     </div>
+    <button class="sign-out-btn" (click)="logout()">Sign Out</button>
+  </div>
 
+  <div class="content">
+    <div class="tab-content">
+      <div class="holidays-container">
+        <h1>Holidays Management</h1>
 
-    <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
-      <ng-container matColumnDef="date">
-        <th mat-header-cell *matHeaderCellDef> Date </th>
-        <td mat-cell *matCellDef="let element"> {{element.date}} </td>
-      </ng-container>
+        <div class="holiday-stats">
+          <h3>About your holidays this year:</h3>
+          <div class="stat-item">
+            <span>Total allocated days:</span>
+            <span class="value">{{ totalDays }}</span>
+          </div>
+          <div class="stat-item">
+            <span>Days already planned and consumed:</span>
+            <span class="value">{{ usedDays }}</span>
+          </div>
+          <div class="stat-item">
+            <span>Remaining days that need planning:</span>
+            <span class="value">{{ remainingDays }}</span>
+          </div>
 
-      <ng-container matColumnDef="status">
-        <th mat-header-cell *matHeaderCellDef> Status </th>
-        <td mat-cell *matCellDef="let element"> {{element.status}} </td>
-      </ng-container>
+          <div class="progress-container">
+            <div class="progress-bar">
+              <div class="progress" [style.width.%]="(usedDays / totalDays) * 100"></div>
+            </div>
+            <div class="progress-labels">
+              <span>0</span>
+              <span>{{ totalDays }}</span>
+            </div>
+          </div>
 
-      <ng-container matColumnDef="actions">
-        <th mat-header-cell *matHeaderCellDef> Actions </th>
-        <td mat-cell *matCellDef="let element">
-          <button mat-button color="warn" (click)="deleteRequest(element)">Delete</button>
-        </td>
-      </ng-container>
+          <button class="request-btn" (click)="toggleRequestForm()">Request for Vacation</button>
+        </div>
 
-      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-    </table>
+        <div *ngIf="showRequestForm" class="request-form">
+          <div class="form-group">
+            <label>Start Date</label>
+            <input type="date" [(ngModel)]="startDate">
+          </div>
+
+          <div class="form-group">
+            <label>End Date</label>
+            <input type="date" [(ngModel)]="endDate">
+          </div>
+
+          <div class="form-group">
+            <label>Reason</label>
+            <textarea [(ngModel)]="reason" rows="3"></textarea>
+          </div>
+
+          <button class="submit-btn" (click)="submitVacationRequest()">Submit Request</button>
+        </div>
+
+        <div class="table-container">
+          <table>
+            <thead>
+            <tr>
+              <th>Date</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let request of requests">
+              <td>{{ request.date }}</td>
+              <td [class]="request.status.toLowerCase()">{{ request.status }}</td>
+              <td>
+                <button class="delete-btn" (click)="deleteRequest(request)">Delete</button>
+              </td>
+            </tr>
+            <tr *ngIf="requests.length === 0">
+              <td colspan="3" class="no-data">No vacation requests available</td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
   </div>
 </div>

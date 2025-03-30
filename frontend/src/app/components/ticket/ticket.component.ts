@@ -3,7 +3,9 @@ import {FormControl, FormsModule, ReactiveFormsModule} from '@angular/forms';
 
 import {AngularFirestoreModule} from '@angular/fire/compat/firestore';
 import {NgForOf} from '@angular/common';
-import {MatButton} from '@angular/material/button';
+import {Router} from '@angular/router';
+import {MatSnackBar} from '@angular/material/snack-bar';
+import {AuthService} from '../../services/auth.service';
 
 interface WorkDay {
   date: string;
@@ -17,8 +19,7 @@ interface WorkDay {
     FormsModule,
     AngularFirestoreModule,
     ReactiveFormsModule,
-    NgForOf,
-    MatButton
+    NgForOf
   ],
   templateUrl: './ticket.component.html',
   styleUrls: ['./ticket.component.scss']
@@ -26,13 +27,22 @@ interface WorkDay {
 export class TicketComponent  implements OnInit {
   searchControl = new FormControl('');
   statusFilter = new FormControl('');
+
+  // Updated data with English status values
   workDays: WorkDay[] = [
-    { date: '2025-03-01', hoursWorked: 8, status: 'aprobat' },
-    { date: '2025-03-02', hoursWorked: 6, status: 'în așteptare' },
-    { date: '2025-03-03', hoursWorked: 5, status: 'respins' },
+    { date: '2025-03-01', hoursWorked: 8, status: 'approved' },
+    { date: '2025-03-02', hoursWorked: 6, status: 'pending' },
+    { date: '2025-03-03', hoursWorked: 5, status: 'rejected' },
   ];
+
   filteredWorkDays: WorkDay[] = [...this.workDays];
   sortAscending = true;
+
+  constructor(
+    private router: Router,
+    private snackBar: MatSnackBar,
+    private authService: AuthService
+  ) {}
 
   ngOnInit(): void {
     this.searchControl.valueChanges.subscribe(() => this.filterData());
@@ -60,8 +70,24 @@ export class TicketComponent  implements OnInit {
     this.sortAscending = !this.sortAscending;
   }
 
-  goBack() {
-    history.back();
+  // New navigation methods
+  goToTrackingTime(): void {
+    this.router.navigate(['/home']);
+  }
+
+  goToHolidays(): void {
+    this.router.navigate(['/holidays']);
+  }
+
+  goToUpToDate(): void {
+    this.router.navigate(['/up-to-date']);
+  }
+
+  logout(): void {
+    this.authService.logout().then(() => {
+      this.router.navigate(['/login']);
+    }).catch(error => {
+      console.error("Error during logout:", error);
+    });
   }
 }
-

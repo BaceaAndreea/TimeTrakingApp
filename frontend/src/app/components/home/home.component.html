@@ -1,31 +1,68 @@
 <div class="home-container">
   <div class="header">
-    <button (click)="logout()">Sign Out</button>
+    <div class="navbar-container">
+      <div class="tab-navigation">
+        <div class="tab" [class.active]="activeTab === 'tracking'" (click)="setActiveTab('tracking')">Tracking Time</div>
+        <div class="tab" [class.active]="activeTab === 'tickets'" (click)="setActiveTab('tickets')">Tickets</div>
+        <div class="tab" [class.active]="activeTab === 'holidays'" (click)="setActiveTab('holidays')">Holidays</div>
+        <div class="tab" [class.active]="activeTab === 'uptodate'" (click)="setActiveTab('uptodate')">Time Off</div>
+      </div>
+    </div>
+    <button class="sign-out-btn" (click)="logout()">Sign Out</button>
   </div>
 
   <div class="content">
-    <mat-tab-group class="vertical-tabs" (selectedTabChange)="onTabChange($event)">
-      <mat-tab label="Tracking Time">
-        <div class="timer-container">
-          <h1>Timer</h1>
+    <div class="tab-content" *ngIf="activeTab === 'tracking'">
+      <div class="timer-container">
+        <h1>Timer</h1>
+        <div class="actual-status">
+          <p>Total time spend: {{ formatTime(totalTimeSpent) }}</p>
+        </div>
+        <div class="timer-card">
           <div class="timer-display">
-            <p>{{ timeElapsed }} secunde</p>
+            <p>{{ formatTime(timeElapsed) }}</p>
           </div>
+
+          <div class="progress-circle-container">
+            <div class="progress-circle">
+              <svg viewBox="0 0 100 100">
+                <circle class="progress-circle-bg" cx="50" cy="50" r="45"></circle>
+                <circle class="progress-circle-value" cx="50" cy="50" r="45"
+                        [style.stroke-dashoffset.px]="283 - (283 * (timeElapsed % 60) / 60)"></circle>
+              </svg>
+              <div class="progress-circle-text">{{ (timeElapsed % 60) }}</div>
+            </div>
+          </div>
+
           <div class="progress-bar">
-            <div class="progress" [style.width]="(timeElapsed % 60) + '%'"></div>
+            <div class="progress" [style.width.%]="(timeElapsed % 60) / 60 * 100"></div>
           </div>
+
           <div class="buttons">
-            <button (click)="startStopTimer()">{{ isRunning ? 'Stop' : 'Start' }}</button>
-            <button (click)="resetTimer()">Resetează</button>
+            <button class="start-btn" (click)="startStopTimer()">{{ isRunning ? 'Stop' : 'Start' }}</button>
+            <button class="reset-btn" (click)="resetTimer()">Reset</button>
+          </div>
+
+          <div class="total-reset-container">
+            <button class="reset-total-btn" (click)="resetTotalTime()">Reset total time</button>
           </div>
         </div>
-      </mat-tab>
+      </div>
+    </div>
 
+    <div class="tab-content" *ngIf="activeTab === 'tickets'">
+      <h2>Tickets Content</h2>
+      <!-- Tickets content here -->
+    </div>
 
-      <mat-tab label="Tickets"></mat-tab>
-      <mat-tab label="Holidays"></mat-tab>
-      <mat-tab label="Up-To-Date"></mat-tab>
+    <div class="tab-content" *ngIf="activeTab === 'holidays'">
+      <h2>Holidays Content</h2>
+      <!-- Holidays content here -->
+    </div>
 
-    </mat-tab-group>
+    <div class="tab-content" *ngIf="activeTab === 'uptodate'">
+      <h2>Up-To-Date Content</h2>
+      <!-- Up-To-Date content here -->
+    </div>
   </div>
 </div>
