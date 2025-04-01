@@ -76,6 +76,10 @@
             <thead>
             <tr>
               <th>Date</th>
+              <th>Request Type</th>
+              <th>Reason</th>
+              <th>Start Time</th>
+              <th>End Time</th>
               <th>Status</th>
               <th>Actions</th>
             </tr>
@@ -83,13 +87,17 @@
             <tbody>
             <tr *ngFor="let ticket of dataSource; let i = index">
               <td>{{ ticket.date }}</td>
+              <td>{{ ticket.type | titlecase }}</td>
+              <td>{{ ticket.reason }}</td>
+              <td>{{ ticket.startTime }}</td>
+              <td>{{ ticket.endTime }}</td>
               <td [class]="ticket.status.toLowerCase()">{{ ticket.status }}</td>
               <td>
                 <button class="delete-btn" (click)="deleteTicket(i)">Delete</button>
               </td>
             </tr>
             <tr *ngIf="dataSource.length === 0">
-              <td colspan="3" class="no-data">No time off requests available</td>
+              <td colspan="7" class="no-data">No time off requests available</td>
             </tr>
             </tbody>
           </table>
