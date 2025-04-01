@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import {NgClass, NgForOf, NgIf} from '@angular/common';
+import {NgClass, NgForOf, NgIf, TitleCasePipe} from '@angular/common';
 import {FormsModule} from '@angular/forms';
 import {Router, RouterLink, RouterLinkActive} from '@angular/router';
 
@@ -17,7 +17,8 @@ interface LeaveTicket {
   imports: [
     NgIf,
     FormsModule,
-    NgForOf
+    NgForOf,
+    TitleCasePipe
   ],
   templateUrl: './up-to-date.component.html',
   styleUrl: './up-to-date.component.scss'
