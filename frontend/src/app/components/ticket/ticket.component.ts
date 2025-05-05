@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, inject, OnInit} from '@angular/core';
 import {FormControl, FormsModule, ReactiveFormsModule} from '@angular/forms';
 
 import {AngularFirestoreModule} from '@angular/fire/compat/firestore';
@@ -6,6 +6,9 @@ import {NgForOf} from '@angular/common';
 import {Router} from '@angular/router';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {AuthService} from '../../services/auth.service';
+import {NavigationService} from '../../services/navigation.service';
+import {Subscription} from 'rxjs';
+import {TicketService} from '../../services/ticket.service';
 
 interface WorkDay {
   date: string;
@@ -28,59 +31,57 @@ export class TicketComponent  implements OnInit {
   searchControl = new FormControl('');
   statusFilter = new FormControl('');
 
-  // Updated data with English status values
-  workDays: WorkDay[] = [
-    { date: '2025-03-01', hoursWorked: 8, status: 'approved' },
-    { date: '2025-03-02', hoursWorked: 6, status: 'pending' },
-    { date: '2025-03-03', hoursWorked: 5, status: 'rejected' },
-  ];
-
-  filteredWorkDays: WorkDay[] = [...this.workDays];
+  filteredWorkDays: WorkDay[] = [];
   sortAscending = true;
 
-  constructor(
-    private router: Router,
-    private snackBar: MatSnackBar,
-    private authService: AuthService
-  ) {}
+  private subscriptions: Subscription[] = [];
+
+  private ticketService     = inject(TicketService);
+  private navigationService = inject(NavigationService);
+  private router            = inject(Router);
+  private authService       = inject(AuthService);
+
+
 
   ngOnInit(): void {
-    this.searchControl.valueChanges.subscribe(() => this.filterData());
-    this.statusFilter.valueChanges.subscribe(() => this.filterData());
-  }
+    // Initialize data
+    this.ticketService.fetchWorkDays();
 
-  filterData(): void {
-    let filtered = this.workDays;
-    const searchTerm = this.searchControl.value?.toLowerCase() || '';
-    const statusTerm = this.statusFilter.value || '';
+    // Subscribe to the filtered work days
+    this.subscriptions.push(
+      this.ticketService.filteredWorkDays$.subscribe(data => {
+        this.filteredWorkDays = data;
+      }),
 
-    if (searchTerm) {
-      filtered = filtered.filter(day => day.date.includes(searchTerm));
-    }
-    if (statusTerm) {
-      filtered = filtered.filter(day => day.status === statusTerm);
-    }
-    this.filteredWorkDays = filtered;
+      this.ticketService.sortDirection$.subscribe(direction => {
+        this.sortAscending = direction;
+      }),
+
+      this.searchControl.valueChanges.subscribe(value => {
+        this.ticketService.setSearchTerm(value || '');
+      }),
+
+      this.statusFilter.valueChanges.subscribe(value => {
+        this.ticketService.setStatusFilter(value || '');
+      })
+    );
   }
 
   sortByDate(): void {
-    this.filteredWorkDays.sort((a, b) =>
-      this.sortAscending ? a.date.localeCompare(b.date) : b.date.localeCompare(a.date)
-    );
-    this.sortAscending = !this.sortAscending;
+    this.ticketService.toggleSortDirection();
   }
 
-  // New navigation methods
   goToTrackingTime(): void {
+    this.navigationService.setActiveTab('tracking');
     this.router.navigate(['/home']);
   }
 
   goToHolidays(): void {
-    this.router.navigate(['/holidays']);
+    this.navigationService.setActiveTab('holidays');
   }
 
   goToUpToDate(): void {
-    this.router.navigate(['/up-to-date']);
+    this.navigationService.setActiveTab('uptodate');
   }
 
   logout(): void {

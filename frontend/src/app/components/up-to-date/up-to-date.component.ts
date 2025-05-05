@@ -1,16 +1,11 @@
-import { Component } from '@angular/core';
-import {NgClass, NgForOf, NgIf, TitleCasePipe} from '@angular/common';
-import {FormsModule} from '@angular/forms';
-import {Router, RouterLink, RouterLinkActive} from '@angular/router';
-
-interface LeaveTicket {
-  date: string;
-  type: string;
-  reason: string;
-  startTime: string;
-  endTime: string;
-  status: 'Approved' | 'Pending' | 'Rejected';
-}
+import {Component, OnInit, OnDestroy, inject} from '@angular/core';
+import { NgClass, NgForOf, NgIf, TitleCasePipe } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
+import { Subscription } from 'rxjs';
+import { NavigationService } from '../../services/navigation.service';
+import { AuthService } from '../../services/auth.service';
+import {LeaveTicket, UpToDateService} from '../../services/up-to-date.service';
 
 @Component({
   selector: 'app-up-to-date',
@@ -23,33 +18,66 @@ interface LeaveTicket {
   templateUrl: './up-to-date.component.html',
   styleUrl: './up-to-date.component.scss'
 })
-export class UpToDateComponent {
-  totalTickets = 10;
-  usedTickets = 3;
-  showRequestForm = false;
-  requestType = 'personal';
-  reason = '';
-  startTime = '';
-  endTime = '';
+export class UpToDateComponent implements OnInit, OnDestroy {
+  totalTickets: number = 10;
+  usedTickets: number = 3;
+  showRequestForm: boolean = false;
+  requestType: string = 'personal';
+  reason: string = '';
+  startTime: string = '';
+  endTime: string = '';
 
-  dataSource: LeaveTicket[] = [
-    { date: '2024-05-01', type: 'personal', reason: 'Vacation', startTime: '09:00', endTime: '12:00', status: 'Approved' },
-    { date: '2024-06-10', type: 'medical', reason: 'Doctor appointment', startTime: '14:00', endTime: '16:00', status: 'Pending' }
-  ];
+  // Keep a local copy for the template
+  dataSource: LeaveTicket[] = [];
 
-  constructor(private router: Router) {}
+  private subscriptions: Subscription[] = [];
+
+
+  private router            = inject(Router);
+  private authService       = inject(AuthService);
+  private navigationService = inject(NavigationService);
+  private upToDateService   = inject(UpToDateService);
+
+  ngOnInit() {
+    // Subscribe to service data
+    this.subscriptions.push(
+      this.upToDateService.totalTickets$.subscribe(total => {
+        this.totalTickets = total;
+      })
+    );
+
+    this.subscriptions.push(
+      this.upToDateService.usedTickets$.subscribe(used => {
+        this.usedTickets = used;
+      })
+    );
+
+    this.subscriptions.push(
+      this.upToDateService.tickets$.subscribe(tickets => {
+        this.dataSource = tickets;
+      })
+    );
+
+    // Set active tab
+    this.navigationService.setActiveTab('uptodate');
+  }
+
+  ngOnDestroy() {
+    this.subscriptions.forEach(sub => sub.unsubscribe());
+  }
 
   // Navigation methods
   goToTrackingTime(): void {
-    this.router.navigate(['/tracking-time']);
+    this.navigationService.setActiveTab('tracking');
+    this.router.navigate(['/home']);
   }
 
   goToTickets(): void {
-    this.router.navigate(['/leave-tickets']);
+    this.navigationService.setActiveTab('tickets');
   }
 
   goToHolidays(): void {
-    this.router.navigate(['/holidays']);
+    this.navigationService.setActiveTab('holidays');
   }
 
   toggleRequestForm(): void {
@@ -64,39 +92,31 @@ export class UpToDateComponent {
   }
 
   submitLeaveTicket(): void {
-    if (!this.requestType || !this.reason || !this.startTime || !this.endTime) {
-      alert("Please complete all fields.");
-      return;
+    try {
+      this.upToDateService.addLeaveTicket(
+        this.requestType,
+        this.reason,
+        this.startTime,
+        this.endTime
+      );
+
+      // Reset form and close it
+      this.showRequestForm = false;
+    } catch (error) {
+      alert(error);
     }
-
-    const newTicket: LeaveTicket = {
-      date: new Date().toISOString().split('T')[0],
-      type: this.requestType,
-      reason: this.reason,
-      startTime: this.startTime,
-      endTime: this.endTime,
-      status: 'Pending'
-    };
-
-    this.dataSource.push(newTicket);
-    this.usedTickets++;
-    this.showRequestForm = false;
   }
 
   deleteTicket(index: number): void {
-    const ticket = this.dataSource[index];
-    if (ticket.status === 'Approved') {
-      this.usedTickets--;
-    }
-    this.dataSource.splice(index, 1);
+    this.upToDateService.deleteTicket(index);
   }
 
+  // Fixed method name to match what's used in the template
   signOut(): void {
-    // Clear any local storage or session data if needed
-    localStorage.removeItem('user');
-    sessionStorage.clear();
-
-    // Navigate to login page
-    this.router.navigate(['/login']);
+    this.authService.logout().then(() => {
+      this.router.navigate(['/login']);
+    }).catch(error => {
+      console.error("Error during logout:", error);
+    });
   }
 }
