@@ -239,7 +239,41 @@
       transform: translateY(0);
     }
   }
+
+  .form-actions {
+    margin-top: 1.5rem;
+    display: flex;
+    gap: 0.75rem;           /* spațiu între butoane */
+    justify-content: flex-end; /* aliniază butoanele la dreapta */
+  }
+
+  .cancel-btn {
+    background: transparent;
+    border: 1px solid #ccc;
+    color: #555;
+    padding: 0.5rem 1rem;
+  }
 }
+.request-wrapper {
+  text-align: center;
+  margin-top: 15px;
+}
+
+.edit-btn {
+  background-color: #f0f4ff;  /* un albastru foarte pal */
+  color: #2a3f54;             /* un gri-închis pentru contrast */
+  border: 1px solid #c0c8d6;  /* o bordură subtilă */
+  border-radius: 4px;
+  padding: 0.4rem 0.8rem;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.edit-btn:hover {
+  background-color: #e0e8ff;  /* la hover, un pic mai saturat */
+}
+
 
 .table-container {
   margin-top: 30px;

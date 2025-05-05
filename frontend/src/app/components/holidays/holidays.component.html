@@ -16,6 +16,7 @@
       <div class="holidays-container">
         <h1>Holidays Management</h1>
 
+        <!-- statistics -->
         <div class="holiday-stats">
           <h3>About your holidays this year:</h3>
           <div class="stat-item">
@@ -30,7 +31,6 @@
             <span>Remaining days that need planning:</span>
             <span class="value">{{ remainingDays }}</span>
           </div>
-
           <div class="progress-container">
             <div class="progress-bar">
               <div class="progress" [style.width.%]="(usedDays / totalDays) * 100"></div>
@@ -40,29 +40,39 @@
               <span>{{ totalDays }}</span>
             </div>
           </div>
-
-          <button class="request-btn" (click)="toggleRequestForm()">Request for Vacation</button>
         </div>
 
-        <div *ngIf="showRequestForm" class="request-form">
+        <!-- buton NEW REQUEST, doar când nu e edit mode -->
+        <div class="request-wrapper" *ngIf="!showRequestForm">
+          <button class="request-btn" (click)="toggleRequestForm()">
+            Request for Vacation
+          </button>
+        </div>
+
+
+        <!-- FORMULAR NEW REQUEST -->
+        <div
+          *ngIf="showRequestForm && editingRequestId === null"
+          class="request-form">
+          <h3>New Request</h3>
           <div class="form-group">
             <label>Start Date</label>
             <input type="date" [(ngModel)]="startDate">
           </div>
-
           <div class="form-group">
             <label>End Date</label>
             <input type="date" [(ngModel)]="endDate">
           </div>
-
           <div class="form-group">
             <label>Reason</label>
             <textarea [(ngModel)]="reason" rows="3"></textarea>
           </div>
-
-          <button class="submit-btn" (click)="submitVacationRequest()">Submit Request</button>
+          <button class="submit-btn" (click)="submitVacationRequest()">
+            Submit Request
+          </button>
         </div>
 
+        <!-- TABELUL DE REQUESTS -->
         <div class="table-container">
           <table>
             <thead>
@@ -77,14 +87,48 @@
               <td>{{ request.date }}</td>
               <td [class]="request.status.toLowerCase()">{{ request.status }}</td>
               <td>
-                <button class="delete-btn" (click)="deleteRequest(request)">Delete</button>
+                <button class="edit-btn" (click)="editRequest(request)">
+                  Edit
+                </button>
+                <button class="delete-btn" (click)="deleteRequest(request)">
+                  Delete
+                </button>
               </td>
             </tr>
             <tr *ngIf="requests.length === 0">
-              <td colspan="3" class="no-data">No vacation requests available</td>
+              <td colspan="3" class="no-data">
+                No vacation requests available
+              </td>
             </tr>
             </tbody>
           </table>
+        </div>
+
+        <!-- FORMULAR EDIT REQUEST -->
+        <div
+          *ngIf="editingRequestId !== null"
+          class="request-form">
+          <h3>Edit Request</h3>
+          <div class="form-group">
+            <label>Start Date</label>
+            <input type="date" [(ngModel)]="startDate">
+          </div>
+          <div class="form-group">
+            <label>End Date</label>
+            <input type="date" [(ngModel)]="endDate">
+          </div>
+          <div class="form-group">
+            <label>Reason</label>
+            <textarea [(ngModel)]="reason" rows="3"></textarea>
+          </div>
+          <div class="form-actions">
+            <button class="submit-btn" (click)="submitVacationRequest()">
+              Update Request
+            </button>
+            <button class="cancel-btn" (click)="cancelEdit()">
+              Cancel
+            </button>
+          </div>
         </div>
       </div>
     </div>
