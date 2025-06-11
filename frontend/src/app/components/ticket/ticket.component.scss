@@ -212,6 +212,115 @@ table {
       color: #f44336;
       font-weight: 500;
     }
+
+    &.no-data {
+      text-align: center;
+      color: #999;
+      font-style: italic;
+      padding: 30px;
+    }
+  }
+}
+
+// Actions column styling
+.actions {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  flex-wrap: wrap;
+
+  select {
+    padding: 8px 12px;
+    font-size: 14px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    background-color: white;
+    color: #333;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    min-width: 120px;
+
+    &:focus {
+      outline: none;
+      border-color: #4a6cf7;
+      box-shadow: 0 0 0 2px rgba(74, 108, 247, 0.2);
+    }
+
+    &:hover {
+      border-color: #4a6cf7;
+    }
+
+    // Style options based on value
+    option[value="approved"] {
+      color: #4caf50;
+    }
+
+    option[value="pending"] {
+      color: #ff9800;
+    }
+
+    option[value="rejected"] {
+      color: #f44336;
+    }
+  }
+
+  .delete-btn {
+    background-color: #ff5252;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    min-width: 80px;
+
+    &:hover {
+      background-color: #ff1744;
+      transform: translateY(-1px);
+      box-shadow: 0 3px 8px rgba(255, 23, 68, 0.3);
+    }
+
+    &:active {
+      transform: translateY(0);
+    }
+
+    &:focus {
+      outline: none;
+      box-shadow: 0 0 0 2px rgba(255, 82, 82, 0.3);
+    }
+  }
+}
+
+// Loading state
+.loading {
+  text-align: center;
+  padding: 50px;
+  color: #666;
+  font-size: 18px;
+
+  p {
+    margin: 0;
+    position: relative;
+
+    &::after {
+      content: '';
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      border: 2px solid #4a6cf7;
+      border-top-color: transparent;
+      border-radius: 50%;
+      margin-left: 10px;
+      animation: spin 1s linear infinite;
+    }
+  }
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
   }
 }
 
@@ -238,6 +347,24 @@ table {
     input, select, .sort-btn {
       width: 100%;
       min-width: auto;
+    }
+  }
+
+  .actions {
+    flex-direction: column;
+    gap: 8px;
+
+    select, .delete-btn {
+      width: 100%;
+      min-width: auto;
+    }
+  }
+
+  table {
+    font-size: 14px;
+
+    th, td {
+      padding: 10px 8px;
     }
   }
 }
