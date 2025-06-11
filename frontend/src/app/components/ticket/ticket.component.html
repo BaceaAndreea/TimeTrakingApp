@@ -24,16 +24,19 @@
             <option value="pending">Pending</option>
             <option value="rejected">Rejected</option>
           </select>
-          <button class="sort-btn" (click)="sortByDate()">Sort by date</button>
+          <button class="sort-btn" (click)="sortByDate()">
+            Sort by date {{ sortAscending ? '↑' : '↓' }}
+          </button>
         </div>
 
-        <div class="table-container">
+        <div class="table-container" *ngIf="!loading">
           <table>
             <thead>
             <tr>
               <th>Date <span (click)="sortByDate()" class="sort-icon">⬆⬇</span></th>
               <th>Hours worked</th>
               <th>Status</th>
+              <th>Actions</th>
             </tr>
             </thead>
             <tbody>
@@ -41,9 +44,24 @@
               <td>{{ workDay.date }}</td>
               <td>{{ workDay.hoursWorked }}</td>
               <td [class]="workDay.status">{{ workDay.status }}</td>
+              <td class="actions">
+                <select (change)="onStatusChange(workDay, $event)" [value]="workDay.status">
+                  <option value="pending">Pending</option>
+                  <option value="approved">Approved</option>
+                  <option value="rejected">Rejected</option>
+                </select>
+                <button class="delete-btn" (click)="deleteWorkDay(workDay)">Delete</button>
+              </td>
+            </tr>
+            <tr *ngIf="filteredWorkDays.length === 0">
+              <td colspan="4" class="no-data">No work days found</td>
             </tr>
             </tbody>
           </table>
+        </div>
+
+        <div class="loading" *ngIf="loading">
+          <p>Loading work days...</p>
         </div>
       </div>
     </div>
